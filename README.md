@@ -1,5 +1,5 @@
 # electric-field-simulation
 Visualization of electric field in a plane due to charges present along a line<br>
 
-<img src = 'images.jpg'>
+<img src = 'images.png'>
 

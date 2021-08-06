@@ -3,11 +3,12 @@ from charge import Charge
 import math
 
 charges = []
-n = int(input("Enter the number of charges "))
+n = int(input("Enter the number of charges : "))
 for i in range(0, n):
-    mag = int(input("Enter the magnitude of charge with sign "))
-    y = int(input("Enter y coordinate of charge "))
-    charges.append(Charge(magnitude=mag, position=(750, y)))
+    mag = int(input("Enter the magnitude of charge with sign : "))
+    x = int(input("Enter the x coordinate of charge : "))
+    y = int(input("Enter y coordinate of charge : "))
+    charges.append(Charge(magnitude=mag, position=(x, y)))
 pygame.init()
 
 screen = pygame.display.set_mode((1500, 1000))
@@ -33,23 +34,21 @@ def display_field():
             y_net = 0
             success = True
             for charge in charges:
-                if j != charge.position[0] or k != charge.position[1]:
-                    field = 10e9 * charge.magnitude / (charge.get_sq_distance_from((j, k)))
+                if charge.get_sq_distance_from((j, k)) == 0:
+                    success = False
+                else:
+                    field = 10e5 * charge.magnitude / (charge.get_sq_distance_from((j, k)))
                     cos, sin = charge.get_component_factors((j, k))
                     x_net += (cos * field)
                     y_net += (sin * field)
-                else:
-                    success = False
             if success:
                 if x_net != 0:
                     angle = math.atan(y_net / x_net)
-                    if angle == math.pi / 2:
-                        print(y_net, x_net)
                 else:
                     angle = math.pi / 2
                 del_x = arrow_len * math.cos(angle)
                 del_y = arrow_len * math.sin(angle)
-                pygame.draw.line(screen, (219, 52, 235), (j, k), (j + del_x, k + del_y), 1)
+                pygame.draw.line(screen, (219, 52, 235), (j, k), (j + del_x, k - del_y), 1)
 
 
 def display_charges():
